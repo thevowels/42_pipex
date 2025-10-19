@@ -5,47 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 01:01:12 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/20 01:16:07 by aphyo-ht         ###   ########.fr       */
+/*   Created: 2025/10/20 03:37:52 by aphyo-ht          #+#    #+#             */
+/*   Updated: 2025/10/20 04:04:25 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/types.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <errno.h>
 #include <stdlib.h>
-#include <fcntl.h>
+#include <unistd.h>
 
-void prog_end(char *err_message)
+void ft_putstr_fd(char *str, int fd)
 {
-	printf("%s\n", err_message);
-	exit(EXIT_FAILURE);
+	int	i;
+	i = 0;
+	while(str[i])
+	{
+		i++;
+	}
+	write(fd,str,i);
 }
 
-void check_IO_perms(char *infile)
+
+// Fail the fork and set the error number accordingly
+// pid_t test_fork(void) {
+//     errno = EAGAIN;   // or ENOMEM, EINVAL, whatever you want to test
+//     return -1;
+// }
+
+//Fail the pipe and set errno
+// int test_pipe(int fd[2])
+// {
+// 	errno = ENFILE;
+// 	return -1;
+// }
+
+int main(int argc, char **argv, char **envp)
 {
-	if(access(infile, F_OK | R_OK) == 0)
+	int fd[2];
+	pid_t pid[argc];
+	int c_status[argc];
+
+	if(argc == 5)
 	{
-		printf("File exists.\n");
+		if(pipe(fd) == -1)
+		{
+			perror("Error while Creating Pipe");
+			exit(EXIT_FAILURE);
+		}
+		pid[0] = fork();
+		if(pid[0] == 0)
+		{
+			//Child
+		}
+		else if(pid[0] == -1)
+		{
+			//Error while forking for child 1
+			perror("Error while Forking");
+			exit(EXIT_FAILURE);
+		}
+		pid[1] = fork();
+		if(pid[1] == 0)
+		{
+			//Child
+
+		}
+		else if(pid[1] == -1)
+		{
+			//Error while creating child 2
+			perror("Error while Forking");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
-		prog_end("Problem reading input file.");
+		errno = EINVAL;
+		perror("Bad Arguments");
+		ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+		exit(EXIT_FAILURE);
 	}
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	char *cat_path = "/usr/bin/cat";
-	char *cat_argv[] = {"cat", "abc", NULL};
-
 	
-	if(argc != 5)
-		prog_end("Usage: ./pipex file1 cmd1 cmd2 file2");
-	check_IO_perms(argv[1]);
-	int pid;
-	
-	execve(cat_path, cat_argv, envp);
-	
-	printf("Executed\n");
 	return (0);
 }
