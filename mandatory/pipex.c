@@ -6,48 +6,40 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:39 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/23 20:45:21 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/25 04:28:44 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include "libft.h"
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <errno.h>
 
 
-char *get_path(char **envp)
-{
-	
-}
-
-void set_requirements(t_env env, char *cmd)
-{
-	// char *tmp_path;
-	// char *cmd_path;
-	// char **cmd_argv;
-	
-
-	// if(0)
-	// {
-	// 	errno = EINVAL;
-	// 	perror("Error while parsing cmd");
-	// 	exit(EXIT_FAILURE);	
-	// }
-}
-
 void	first_process(t_env env, int(pipe_fd)[2])
 {
-	char	*path;
-	char	*argv[] = {"sleep", "10", NULL};
-	char	**argv;
+	char	*cmd_path;
+	// char	*argv[] = {"sleep", "10", NULL};
+	char	**cmd_argv;
+	cmd_argv = ft_split(env.argv[2], ' ');
+	cmd_path = get_exe_path(env.envp, cmd_argv[0]);
+	
 	
 	int		file_fd;
 
-	file_fd = open("pipex.c", O_RDONLY);
-	path = "/usr/bin/sleep";
+	file_fd = open(env.argv[1], O_RDONLY);
+	if(file_fd == -1)
+	{
+		perror("Error while opening file");
+		exit(EXIT_FAILURE);
+	}
 	// duplicating file_fd to STDIN_FILENO
-	dup2(file_fd, STDIN_FILENO);
+	if(dup2(file_fd, STDIN_FILENO) == -1)
+	{
+		perror("Error while duplicating fd");
+		exit(EXIT_FAILURE);
+	}
 	// Now we've two fd pointing to input file
 	// We've to close the unused one.
 	close(file_fd);
@@ -55,7 +47,11 @@ void	first_process(t_env env, int(pipe_fd)[2])
 	// when we call execve it will write output to either
 	// STDOUT_FILENO or STDERR_FILENO.
 	// We've to make that STDOUT_FILENO point into our pipe's write end
-	dup2(pipe_fd[1], STDOUT_FILENO);
+	if(dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	{
+		perror("Error while duplicating fd");
+		exit(EXIT_FAILURE);
+	}
 	// Now we've two fd pointing to write end of pipe.
 	// We've to close unused one. as its necessary to make sure the pipe closed
 	// When our execve finished or crashed.
@@ -63,7 +59,7 @@ void	first_process(t_env env, int(pipe_fd)[2])
 	// This child process will take the input from the file so we don't use
 	// the read end of pipe. we've to close that too.
 	close(pipe_fd[0]);
-	execve(path, argv, env.envp);
+	execve(cmd_path, cmd_argv, env.envp);
 	perror("Error on first child");
 	exit(EXIT_FAILURE);
 }
@@ -83,15 +79,22 @@ void	second_process(t_env env, int(pipe_fd)[2])
 	
 	// We are gonna read the input from the pipe.
 	// so we've to dup2 the pipe's read end to STD_FILEIN0
-	dup2(pipe_fd[0], STDIN_FILENO);
+	if(dup2(pipe_fd[0], STDIN_FILENO) == -1)
+	{
+		perror("Error while duplicating pipe");
+		exit(EXIT_FAILURE);
+	}
 	// Now we've two fd pointing to the read end of pipe.
 	// So, we've to close the unsed one.
 	close(pipe_fd[0]);
 
 	// We want the output to be in the output file.
 	// So, we've to swap the pointing of STDOUT_FILENO into outfile.
-	dup2(outfile_fd, STDOUT_FILENO);
-
+	if(dup2(outfile_fd, STDOUT_FILENO) == -1)
+	{
+		perror("Error while duplicating pipe");
+		exit(EXIT_FAILURE);
+	}
 	// Now we've to pointing to same one.
 	// We've to close.
 	close(outfile_fd);

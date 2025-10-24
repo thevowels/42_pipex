@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:14 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/23 17:53:38 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/25 04:17:17 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 #include <sys/wait.h>
 
+#include <errno.h>
+
 typedef struct s_env
 {
 	int argc;
@@ -33,5 +35,10 @@ typedef struct s_env
 	
 } t_env;
 
+char	**ft_split(char *str, char c);
+int	ft_startswith(char *str, char *start);
+char *get_all_path(char **envp);
+char *construct_file_path(char *path, char *cmd);
+char *get_exe_path(char **envp, char *cmd);
 
 #endif
