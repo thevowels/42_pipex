@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 06:28:13 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/25 06:30:53 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 01:24:00 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*get_all_path(char **envp)
 	if (!all_path || !*all_path)
 	{
 		errno = ENOENT;
-		perror("PATH Environment variable is not set");
+		perror("command not found");
 		return (NULL);
 	}
 	return (all_path);
@@ -84,7 +84,7 @@ char	*get_exe_path(char *all_path, char *cmd)
 	ft_sarr_free(path_arr_ff);
 	if (!exe_path)
 	{
-		perror("Getting EXE PATH:");
+		perror("command not found");
 		exit(EXIT_FAILURE);
 	}
 	return (exe_path);

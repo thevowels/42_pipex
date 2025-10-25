@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:39 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/25 06:46:15 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 01:27:19 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	first_process(t_env env, int *pipe_fd)
 	file_fd = open(env.argv[1], O_RDONLY);
 	if (file_fd == -1)
 	{
-		perror(env.argv[2]);
+		perror(env.argv[1]);
 		exit(EXIT_FAILURE);
 	}
 	safe_dup2(file_fd, STDIN_FILENO);
