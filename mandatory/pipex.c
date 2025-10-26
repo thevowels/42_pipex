@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:39 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 11:30:14 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 11:58:12 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+
+void	safe_open(int *fd, const char *pathname, int flags, mode_t mode)
+{
+	*fd = open(pathname, flags, mode);
+	if (*fd == -1)
+	{
+		perror(pathname);
+		exit(EXIT_FAILURE);
+	}
+}
 
 void	first_process(t_env env, int *pipe_fd)
 {
@@ -29,12 +39,7 @@ void	first_process(t_env env, int *pipe_fd)
 	all_path = get_all_path(env.envp);
 	cmd_argv = ft_split(env.argv[2], ' ');
 	cmd_path = get_exe_path(all_path, cmd_argv[0]);
-	file_fd = open(env.argv[1], O_RDONLY);
-	if (file_fd == -1)
-	{
-		perror(env.argv[1]);
-		exit(EXIT_FAILURE);
-	}
+	safe_open(&file_fd, env.argv[1], O_RDONLY, 0);
 	safe_dup2(file_fd, STDIN_FILENO);
 	safe_close(file_fd);
 	safe_dup2(pipe_fd[1], STDOUT_FILENO);
@@ -51,13 +56,8 @@ void	second_process(t_env env, int *pipe_fd)
 	char	*all_path;
 	int		outfile_fd;
 
-	outfile_fd = open(env.argv[4], O_CREAT | O_WRONLY | O_TRUNC,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if (outfile_fd == -1)
-	{
-		perror(env.argv[4]);
-		exit(EXIT_FAILURE);
-	}
+	safe_open(&outfile_fd, env.argv[4], O_CREAT | O_WRONLY | O_TRUNC,
+		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	all_path = get_all_path(env.envp);
 	cmd_argv = ft_split(env.argv[3], ' ');
 	cmd_path = get_exe_path(all_path, cmd_argv[0]);
