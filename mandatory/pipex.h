@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:14 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 12:53:57 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:22:19 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ char		*get_exe_path(char *all_path, char *cmd);
 void		set_env(t_env *env, int argc, char **argv, char **envp);
 void		perror_exit(char *s);
 
-void		safe_dup2(int old, int new);
-void		safe_close(int fd);
+void		safe_dup2(int old, int new, int exit_on_fail);
+void		safe_close(int fd, int exit_on_fail);
 void		safe_waitpid(pid_t pid, int *status, int options);
 
 #endif
