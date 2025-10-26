@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:14 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/25 06:31:14 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 11:20:05 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 # define PIPEX_H
 
 // For fork & pipe
-# include <sys/types.h>
-# include <unistd.h>
+// # include <sys/types.h>
+// # include <unistd.h>
 
-// for perror
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/wait.h>
+// // for perror
+// # include <errno.h>
+// # include <stdio.h>
+// # include <stdlib.h>
+// # include <sys/wait.h>
+# include <sys/types.h>
 
 typedef struct s_env
 {
@@ -31,11 +32,14 @@ typedef struct s_env
 
 }			t_env;
 
-char		**ft_split(char *str, char c);
-int			ft_startswith(char *str, char *start);
 char		*get_all_path(char **envp);
 char		*construct_file_path(char *path, char *cmd);
 char		*get_exe_path(char *all_path, char *cmd);
 void		set_env(t_env *env, int argc, char **argv, char **envp);
 void		perror_exit(char *s);
+
+void		safe_dup2(int old, int new);
+void		safe_close(int fd);
+void		safe_waitpid(pid_t pid, int *status, int options);
+
 #endif

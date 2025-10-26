@@ -1,6 +1,6 @@
 NAME			= pipex
 
-MANDATORY_SRCS	= mandatory/pipex.c mandatory/pipex_utils.c
+MANDATORY_SRCS	= mandatory/pipex.c mandatory/pipex_utils.c mandatory/path_utils.c
 MANDATORY_DIR	= mandatory
 
 BONUS_SRCS		=
