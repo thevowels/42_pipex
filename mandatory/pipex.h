@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:14 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 11:20:05 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 12:53:57 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ typedef struct s_env
 	int		argc;
 	char	**argv;
 	char	**envp;
+	pid_t	childs[2];
+	int		pipe_fd[2];
+	int		last_status;
 
 }			t_env;
 

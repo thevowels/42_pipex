@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 11:09:21 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 11:17:08 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:05:03 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ char	*construct_file_path(char *path, char *cmd)
 	return (file_path);
 }
 
+/**
+ * @brief Get the exe path 
+ * @param all_path 
+ * @param cmd 
+ * @return char* 
+ * 
+ * @note now its ok as we want to find only shell commands
+ * @note if its not just shell commands to execute , we should also search for
+ *		the command in current directory. at that time, we have to check access 
+		with just the filename without constructing path for first time.
+ */
 char	*get_exe_path(char *all_path, char *cmd)
 {
 	char	**path_arr;
