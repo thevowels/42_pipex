@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 06:28:13 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 11:34:54 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:25:55 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,27 @@ void	perror_exit(char *s)
 	exit(EXIT_FAILURE);
 }
 
-void	safe_dup2(int old, int new)
+void	safe_dup2(int old, int new, int exit_on_fail)
 {
 	if (dup2(old, new) == -1)
 	{
 		perror("pipex: Error while duplicating fd");
-		exit(EXIT_FAILURE);
+		if (exit_on_fail)
+		{
+			exit(EXIT_FAILURE);
+		}
 	}
 }
 
-void	safe_close(int fd)
+void	safe_close(int fd, int exit_on_fail)
 {
 	if (close(fd) == -1)
 	{
 		perror("pipex: Error while closing fd");
-		exit(EXIT_FAILURE);
+		if (exit_on_fail)
+		{
+			exit(EXIT_FAILURE);
+		}
 	}
 }
 
