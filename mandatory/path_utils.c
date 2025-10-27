@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 11:09:21 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/26 13:05:03 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:36:01 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*construct_file_path(char *path, char *cmd)
  *		the command in current directory. at that time, we have to check access 
 		with just the filename without constructing path for first time.
  */
-char	*get_exe_path(char *all_path, char *cmd)
+char	*get_exe_path(char *all_path, char *cmd, char **cmd_argv, int close_on_error)
 {
 	char	**path_arr;
 	char	**path_arr_ff;
@@ -84,6 +84,9 @@ char	*get_exe_path(char *all_path, char *cmd)
 	ft_sarr_free(path_arr_ff);
 	if (!exe_path)
 	{
+		safe_close(close_on_error,1);
+		// printf("%d\n", close_on_error);
+		ft_sarr_free(cmd_argv);
 		perror("command not found");
 		exit(EXIT_FAILURE);
 	}
