@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:39 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/27 10:34:25 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/27 11:58:07 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	first_process(t_env env)
 	safe_close(env.pipe_fd[1], 1);
 	all_path = get_all_path(env.envp);
 	cmd_argv = ft_split(env.argv[2], ' ');
-	cmd_path = get_exe_path(all_path, cmd_argv[0],cmd_argv,STDOUT_FILENO);
+	cmd_path = get_exe_path(all_path, cmd_argv[0], cmd_argv, STDOUT_FILENO);
 	execve(cmd_path, cmd_argv, env.envp);
 	perror("Error on first child");
 	exit(EXIT_FAILURE);
@@ -65,7 +65,7 @@ void	second_process(t_env env)
 	safe_close(outfile_fd, 1);
 	all_path = get_all_path(env.envp);
 	cmd_argv = ft_split(env.argv[3], ' ');
-	cmd_path = get_exe_path(all_path, cmd_argv[0], cmd_argv,STDIN_FILENO);
+	cmd_path = get_exe_path(all_path, cmd_argv[0], cmd_argv, STDIN_FILENO);
 	execve(cmd_path, cmd_argv, env.envp);
 	perror("Error on second Process");
 	exit(EXIT_FAILURE);
@@ -97,13 +97,10 @@ int	main(int argc, char **argv, char **envp)
 		perror_exit("pipex: Error while creating second child");
 	if (env.childs[1] == 0)
 		second_process(env);
-	// safe_waitpid(env.childs[0], &(env.last_status), WNOHANG);
 	safe_close(env.pipe_fd[0], 1);
 	safe_close(env.pipe_fd[1], 1);
 	safe_waitpid(env.childs[1], &(env.last_status), 0);
-	// while (wait(NULL) != -1)
-	// 	continue ;
-	while(wait(NULL) != -1)
-		continue;
+	while (wait(NULL) != -1)
+		continue ;
 	return (env.last_status / 256);
 }

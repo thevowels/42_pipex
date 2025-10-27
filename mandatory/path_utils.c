@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 11:09:21 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/27 10:36:01 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/27 11:58:00 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,18 @@ char	*construct_file_path(char *path, char *cmd)
 }
 
 /**
- * @brief Get the exe path 
- * @param all_path 
- * @param cmd 
- * @return char* 
- * 
+ * @brief Get the exe path
+ * @param all_path
+ * @param cmd
+ * @return char*
+ *
  * @note now its ok as we want to find only shell commands
  * @note if its not just shell commands to execute , we should also search for
- *		the command in current directory. at that time, we have to check access 
+ *		the command in current directory. at that time, we have to check access
 		with just the filename without constructing path for first time.
  */
-char	*get_exe_path(char *all_path, char *cmd, char **cmd_argv, int close_on_error)
+char	*get_exe_path(char *all_path, char *cmd, char **cmd_argv,
+		int close_on_error)
 {
 	char	**path_arr;
 	char	**path_arr_ff;
@@ -84,8 +85,7 @@ char	*get_exe_path(char *all_path, char *cmd, char **cmd_argv, int close_on_erro
 	ft_sarr_free(path_arr_ff);
 	if (!exe_path)
 	{
-		safe_close(close_on_error,1);
-		// printf("%d\n", close_on_error);
+		safe_close(close_on_error, 1);
 		ft_sarr_free(cmd_argv);
 		perror("command not found");
 		exit(EXIT_FAILURE);
