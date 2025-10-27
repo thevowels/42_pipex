@@ -6,22 +6,13 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:14 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/27 12:23:41 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:29:30 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-// For fork & pipe
-// # include <sys/types.h>
-// # include <unistd.h>
-
-// // for perror
-// # include <errno.h>
-// # include <stdio.h>
-// # include <stdlib.h>
-// # include <sys/wait.h>
 # include <sys/types.h>
 
 typedef struct s_env
