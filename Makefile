@@ -3,16 +3,11 @@ NAME			= pipex
 MANDATORY_SRCS	= mandatory/pipex.c mandatory/pipex_utils.c mandatory/path_utils.c
 MANDATORY_DIR	= mandatory
 
-BONUS_SRCS		=
-BONUS_DIR		= bonus
-
 INCLUDES 		= -Imandatory -Ibonus -Ilibft/includes
-
 
 CC 				= cc
 CFLAGS 			= -Wall -Wextra -Werror 
 LIBFLAGS		= -Llibft -lft
-
 
 
 M_OBJS = $(MANDATORY_SRCS:.c=.o)

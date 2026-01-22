@@ -6,7 +6,7 @@
 /*   By: aphyo-ht <aphyo-ht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 11:21:39 by aphyo-ht          #+#    #+#             */
-/*   Updated: 2025/10/27 12:28:38 by aphyo-ht         ###   ########.fr       */
+/*   Updated: 2026/01/22 10:46:08 by aphyo-ht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,12 @@ void	first_process(t_env env)
 	safe_dup2(file_fd, STDIN_FILENO, 1);
 	safe_close(file_fd, 1);
 	cmd_argv = ft_split(env.argv[2], ' ');
-	cmd_path = get_exe_path(env.all_path, cmd_argv, STDOUT_FILENO);
-	execve(cmd_path, cmd_argv, env.envp);
+	if (cmd_argv)
+	{
+		cmd_path = get_exe_path(env.all_path, cmd_argv, STDOUT_FILENO);
+		execve(cmd_path, cmd_argv, env.envp);
+	}
+	errno = EINVAL;
 	perror("Error on first child");
 	exit(EXIT_FAILURE);
 }
@@ -61,15 +65,21 @@ void	last_process(t_env env)
 	safe_dup2(outfile_fd, STDOUT_FILENO, 1);
 	safe_close(outfile_fd, 1);
 	cmd_argv = ft_split(env.argv[3], ' ');
-	cmd_path = get_exe_path(env.all_path, cmd_argv, STDIN_FILENO);
-	execve(cmd_path, cmd_argv, env.envp);
+	if (cmd_argv)
+	{
+		cmd_path = get_exe_path(env.all_path, cmd_argv, STDIN_FILENO);
+		execve(cmd_path, cmd_argv, env.envp);
+	}
 	exit(EXIT_FAILURE);
 }
 
 void	init_env(t_env *env, int argc, char **argv, char **envp)
 {
 	if (argc != 5)
-		exit(EXIT_FAILURE);
+	{
+		errno = EINVAL;
+		perror_exit("Usage: ./pipex infile cmd1 cmd2 outfile");
+	}
 	env->argc = argc;
 	env->argv = argv;
 	env->envp = envp;
